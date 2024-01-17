@@ -2,7 +2,9 @@ package kodlamaio.Devs.webApi.controllers;
 
 import java.util.List;
 
+import kodlamaio.Devs.business.requests.UpdateLanguageRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import kodlamaio.Devs.business.abstracts.LanguageService;
@@ -22,32 +24,31 @@ public class LanguagesController {
         this.languageService = languageService;
     }
 
-    @GetMapping("/getAll")
+    @GetMapping()
     public List<GetAllLanguagesResponse> getAll() {
         return languageService.getAll();
     }
     
-    @PostMapping("/add")
+    @PostMapping()
+    @ResponseStatus(code = HttpStatus.CREATED)
     public void add(@RequestBody CreateLanguageRequest createLanguageRequest) {
         languageService.add(createLanguageRequest);
     }
 
-    @GetMapping("/getById/{id}")
+    @GetMapping("{id}")
     public GetByIdLanguageResponse getById(@PathVariable int id) {
         return languageService.getById(id);
     }
 
+    @DeleteMapping("{id}")
+    public void delete(@PathVariable int id) {
+        languageService.delete(id);
+    }
 
-//
-//    @DeleteMapping("/delete/{id}")
-//    public void delete(@PathVariable int id) {
-//        languageService.delete(id);
-//    }
-//
-//    @PutMapping("update/{id}")
-//    public void update(@RequestBody Language language, @PathVariable int id) {
-//        languageService.update(id, language);
-//    }
+    @PutMapping()
+    public void update(@RequestBody UpdateLanguageRequest updateLanguageRequest) {
+        languageService.update(updateLanguageRequest);
+    }
 }
 
 
