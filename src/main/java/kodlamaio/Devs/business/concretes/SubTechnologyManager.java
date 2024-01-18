@@ -6,6 +6,7 @@ import kodlamaio.Devs.business.responses.GetAllLanguagesResponse;
 import kodlamaio.Devs.business.responses.GetAllSubTechnologiesResponse;
 import kodlamaio.Devs.business.responses.GetByIdLanguageResponse;
 import kodlamaio.Devs.business.responses.GetByIdSubTechnologiesResponse;
+import kodlamaio.Devs.core.utitilies.mapper.ModelMapperService;
 import kodlamaio.Devs.entities.concretes.Language;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,39 +17,35 @@ import kodlamaio.Devs.entities.concretes.SubTechnology;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SubTechnologyManager implements SubTechnologyService{
 	private SubTechnologyRepository subTechnologyRepository;
+	private ModelMapperService modelMapperService;
 
-	
 	@Autowired
-	public SubTechnologyManager(SubTechnologyRepository subTechnologyRepository) {
+	public SubTechnologyManager(SubTechnologyRepository subTechnologyRepository, ModelMapperService modelMapperService) {
 		super();
 		this.subTechnologyRepository = subTechnologyRepository;
+		this.modelMapperService = modelMapperService;
 	}
-
 
 	@Override
 	public List<GetAllSubTechnologiesResponse> getAll() {
-		List<GetAllSubTechnologiesResponse> responses = new ArrayList<>();
 		List<SubTechnology> subTechnologies = subTechnologyRepository.findAll();
 
-		for (SubTechnology subTechnology : subTechnologies){
-			GetAllSubTechnologiesResponse response = new GetAllSubTechnologiesResponse();
-			response.setId(subTechnology.getId());
-			response.setName(subTechnology.getName());
-			responses.add(response);
-		}
+		List<GetAllSubTechnologiesResponse> responses = subTechnologies.stream()
+				.map(subTechnology -> modelMapperService.forResponse().map(subTechnology,GetAllSubTechnologiesResponse.class))
+				.collect(Collectors.toList());
+
 		return responses;
 	}
 
 	@Override
 	public GetByIdSubTechnologiesResponse getById(int id) {
-		GetByIdSubTechnologiesResponse response = new GetByIdSubTechnologiesResponse();
 		SubTechnology subTechnology = subTechnologyRepository.getReferenceById(id);
-		response.setId(subTechnology.getId());
-		response.setName(subTechnology.getName());
+		GetByIdSubTechnologiesResponse response = modelMapperService.forResponse().map(subTechnology,GetByIdSubTechnologiesResponse.class);
 		return response;
 	}
 }
