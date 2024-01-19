@@ -1,19 +1,15 @@
 package kodlamaio.Devs.webApi.controllers;
 
-import java.util.List;
-
-import kodlamaio.Devs.business.responses.GetAllLanguagesResponse;
+import kodlamaio.Devs.business.abstracts.SubTechnologyService;
+import kodlamaio.Devs.business.requests.CreateSubTechnologyRequest;
+import kodlamaio.Devs.business.requests.UpdateSubTechnologyRequest;
 import kodlamaio.Devs.business.responses.GetAllSubTechnologiesResponse;
-import kodlamaio.Devs.business.responses.GetByIdLanguageResponse;
 import kodlamaio.Devs.business.responses.GetByIdSubTechnologiesResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
-import kodlamaio.Devs.business.abstracts.SubTechnologyService;
-import kodlamaio.Devs.entities.concretes.SubTechnology;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/frameworks")
@@ -24,14 +20,26 @@ public class SubTechnologiesController {
 		super();
 		this.subTechnologyService = subTechnologyService;
 	}
-	@GetMapping("/getAll")
+	@GetMapping()
 	public List<GetAllSubTechnologiesResponse> getAll() {
 		System.out.println(subTechnologyService.getAll());
 		return subTechnologyService.getAll();
 	}
-
-	@GetMapping("/getById/{id}")
+	@GetMapping("/{id}")
 	public GetByIdSubTechnologiesResponse getById(@PathVariable int id) {
 		return subTechnologyService.getById(id);
+	}
+	@PostMapping()
+	@ResponseStatus(code = HttpStatus.CREATED)
+	public void add(@RequestBody CreateSubTechnologyRequest createSubTechnologyRequest){
+		subTechnologyService.add(createSubTechnologyRequest);
+	}
+	@DeleteMapping("/{id}")
+	public void delete(@PathVariable int id){
+		subTechnologyService.delete(id);
+	}
+	@PutMapping
+	public void update(@RequestBody UpdateSubTechnologyRequest updateSubTechnologyRequest){
+		subTechnologyService.update(updateSubTechnologyRequest);
 	}
 }
