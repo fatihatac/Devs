@@ -6,5 +6,5 @@ import kodlamaio.Devs.entities.concretes.Language;
 
 
 public interface LanguageRepository extends JpaRepository<Language, Integer>{
-
+    boolean existsByName(String name);
 }

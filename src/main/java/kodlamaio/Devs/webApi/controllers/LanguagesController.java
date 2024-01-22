@@ -1,5 +1,6 @@
 package kodlamaio.Devs.webApi.controllers;
 
+import jakarta.validation.Valid;
 import kodlamaio.Devs.business.abstracts.LanguageService;
 import kodlamaio.Devs.business.requests.CreateLanguageRequest;
 import kodlamaio.Devs.business.requests.UpdateLanguageRequest;
@@ -30,7 +31,7 @@ public class LanguagesController {
     
     @PostMapping()
     @ResponseStatus(code = HttpStatus.CREATED)
-    public void add(@RequestBody CreateLanguageRequest createLanguageRequest) {
+    public void add(@RequestBody @Valid CreateLanguageRequest createLanguageRequest) {
         languageService.add(createLanguageRequest);
     }
 
